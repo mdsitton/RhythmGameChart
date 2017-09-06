@@ -9,7 +9,7 @@
 
 Byte order mark:
     - This could be a 4 byte ascii sequence that would be tied back to the name of the data format we decide on.
-        - or maybe not i dont really know a lot about BOM's
+        - or maybe not I dont really know a lot about BOM's
 
 Version Number
     - We should have a version number in the header incase we need to ammend the format due to issues or functionality improvments.
@@ -78,10 +78,15 @@ This leaves us with 15 event types and a max of 15 bytes per event.
 ##### Note
 Each note event defines a set of notes which occur at the same instant. There are several different forms of a note event.
 
-`<event byte count and type> <note count> <note 1> <note N...>` No Length
-`<event byte count and type> <note count> <length> <note 1> <note N...>` Single length
+`<event byte count and type> <note count> <note 1> <note N...>`
+- No Length
+
+`<event byte count and type> <note count> <length> <note 1> <note N...>`
+- Single length
   - Note, the reason for having length first is that you are expanding the multi-note event out into single notes internally it's easier to have the length first since you don't need to keep track of the all of the previous notes in the event.
-`<event byte count and type> <note count> <note 1> <length> <note N...> <length>` Multi length chords.
+
+`<event byte count and type> <note count> <note 1> <length> <note N...> <length>`
+- Multi-length chords.
 
 These are specified by the two highest bits in note count:
 
