@@ -68,7 +68,9 @@ This leaves us with 15 event types and a max of 15 bytes per event.
   - If we just have 2 main types of events note, and meta/mod we could use just a single bit for type, and have 127 bytes available for event length.
 
 ### Event types
+
 `0b00000000` Note event - Note or multiple notes.
+
 `0b10000000` Mod event - events which modify the meaning of a note or set of notes.
 
 
@@ -97,6 +99,7 @@ These are specified by the two highest bits in note count:
 `0b11xxxxxx` Note event with diffent lengths for all notes.
 
 `0b01xxxxxx` Undefined.
+
 
 ##### Mod
 
