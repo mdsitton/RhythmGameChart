@@ -63,9 +63,8 @@ The first byte in any event serves two purposes.
 - Event type
 - Event length
 
-This leaves us with 15 event types and a max of 15 bytes per event.
-- We may want to take away bits from event type and give it to event length. Because with having a lot of different length notes on a chord we will run out of length for an event pretty quick.
-  - If we just have 2 main types of events note, and meta/mod we could use just a single bit for type, and have 127 bytes available for event length.
+This leaves us with 2 event types and a max of 127 bytes per event.
+  - If we dont restrict to 2 event types we end up having multi-note events that can be longer than the support event length.. not a good situation to have. This is the fix for now unless anyone has any strong objections.
 
 ### Event types
 
