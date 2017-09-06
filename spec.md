@@ -1,4 +1,4 @@
-# Rhytm Game Chart Format Specification
+# Rhytm Game Chart Specification
 
 ## Overall filestructure:
 
