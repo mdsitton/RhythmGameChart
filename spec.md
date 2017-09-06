@@ -1,8 +1,10 @@
 Overall filestructure:
-    <header> <metadata> <timed global song events> <Instrument Track 1> <Instrument Track N...>
+
+    `<header> <metadata> <timed global song events> <Instrument Track 1> <Instrument Track N...>`
 
 
 Header:
+
     Byte order mark:
         - This could be a 4 byte ascii sequence that would be tied back to the name of the data format we decide on.
             - or maybe not i dont really know a lot about BOM's
@@ -49,7 +51,8 @@ Metadata:
 
 
 Instrument tracks:
-    <track header> <timed event data> <difficulty 1 data> <difficulty N... data> 
+
+    `<track header> <timed event data> <difficulty 1 data> <difficulty N... data>`
     
     This works similarly to midi:
     <var len delta tick since last event> <event>
