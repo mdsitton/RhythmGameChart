@@ -99,6 +99,8 @@ These are specified by the two highest bits in note count:
 
 `0b01xxxxxx` Undefined.
 
+*Note these are not set in stone we may rearrange this somewhat*
+
 
 ##### Mod
 
