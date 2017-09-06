@@ -1,6 +1,6 @@
 Overall filestructure:
 
-    `<header> <metadata> <timed global song events> <Instrument Track 1> <Instrument Track N...>`
+`<header> <metadata> <timed global song events> <Instrument Track 1> <Instrument Track N...>`
 
 
 Header:
@@ -52,7 +52,7 @@ Metadata:
 
 Instrument tracks:
 
-    `<track header> <timed event data> <difficulty 1 data> <difficulty N... data>`
+`<track header> <timed event data> <difficulty 1 data> <difficulty N... data>`
     
     This works similarly to midi:
     <var len delta tick since last event> <event>
