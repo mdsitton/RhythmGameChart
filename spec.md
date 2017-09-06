@@ -7,17 +7,17 @@
 
 ## Header
 
-Byte order mark:
-    - This could be a 4 byte ascii sequence that would be tied back to the name of the data format we decide on.
-        - or maybe not I dont really know a lot about BOM's
+Byte order mark
+- This could be a 4 byte ascii sequence that would be tied back to the name of the data format we decide on.
+  - or maybe not I dont really know a lot about BOM's
 
 Version Number
-    - We should have a version number in the header incase we need to ammend the format due to issues or functionality improvments.
-        - Also backwards compatibility should be taken into consideration for new format versions.
+- We should have a version number in the header incase we need to ammend the format due to issues or functionality improvments.
+  - Also backwards compatibility should be taken into consideration for new format versions.
 
 Track Offsets:
-    - An offset table will store file offsets from the start of the metadata section for all tracks in the file.
-    - Metadata will always be offset 0 so there really isnt much reason to include it in the table.
+- An offset table will store file offsets from the start of the metadata section for all tracks in the file.
+  - Metadata will always be offset 0 so there really isnt much reason to include it in the table.
 
 
 ## Metadata
