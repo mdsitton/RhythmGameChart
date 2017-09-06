@@ -90,10 +90,13 @@ Each note event defines a set of notes which occur at the same instant. There ar
 
 These are specified by the two highest bits in note count:
 
-0b00xxxxxx - Note event with no length.
-0b10xxxxxx - Note event with a constant length for all notes.
-0b11xxxxxx - Note event with diffent lengths for all notes.
-0b01xxxxxx - Undefined.
+`0b00xxxxxx` Note event with no length.
+
+`0b10xxxxxx` Note event with a constant length for all notes.
+
+`0b11xxxxxx` Note event with diffent lengths for all notes.
+
+`0b01xxxxxx` Undefined.
 
 ##### Mod
 
