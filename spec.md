@@ -103,8 +103,6 @@ These are specified by the two highest bits in note count:
 
 <length> is a variable length tick count
 
-*Problem - Dealing with tempo changes with this method is more difficult than having note on/off events* 
-
 
 ##### Mod
 
