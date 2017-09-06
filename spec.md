@@ -102,8 +102,12 @@ These are specified by the two highest bits in note count:
 
 *WIP*
 
-Mod types.
+Mod types:
+
 `0x1` force strum - deactivates any active force hopo or force tap
+
 `0x2` force hopo - deactivates any active force strum or force tap
+
 `0x3` force tap - deactivates and active force strum or force hopo
+
 `0x4` solo start/end - this could work as a toggle solo so we only need one event type
