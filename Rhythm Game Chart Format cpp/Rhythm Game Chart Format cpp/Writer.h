@@ -1,0 +1,26 @@
+#pragma once
+
+#include "IO Util.h"
+#include <vector>
+namespace RhythmGameChart
+{
+    namespace IO
+    {
+        class Writer
+        {
+        public:
+            Writer();
+            ~Writer();
+        protected:
+            // Converts a number into variable length value byte data and stores it in the m_encodedVLV vector
+            void VLVEncode(VLV number);
+
+            // Adds tick data in front of the provided byte data
+            void JoinTick(VLV tick, std::vector<byte>& eventData);
+
+        private:
+            std::vector<byte> m_encodedVLV;
+        };
+    }
+}
+
