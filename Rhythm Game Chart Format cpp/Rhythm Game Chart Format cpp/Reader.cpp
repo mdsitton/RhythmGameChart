@@ -7,15 +7,6 @@ namespace RhythmGameChart
 {
     namespace IO
     {
-        Reader::Reader()
-        {
-        }
-
-
-        Reader::~Reader()
-        {
-        }
-
         VLV Reader::VLVDecode(std::ifstream& ifs)
         {
             return VLV();

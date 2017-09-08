@@ -33,6 +33,9 @@
     <ClInclude Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\IO Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\BaseIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\stdafx.cpp">
@@ -45,6 +48,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\Writer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\IO Util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\BaseIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

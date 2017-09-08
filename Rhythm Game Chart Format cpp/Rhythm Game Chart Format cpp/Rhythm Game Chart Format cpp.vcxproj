@@ -145,6 +145,7 @@
     <Text Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\BaseIO.h" />
     <ClInclude Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\IO Util.h" />
     <ClInclude Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\Reader.h" />
     <ClInclude Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\stdafx.h" />
@@ -152,6 +153,8 @@
     <ClInclude Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\Writer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\BaseIO.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\IO Util.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\Reader.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Alex%27s stuff\Dev\RGC Format\RhythmGameChart\Rhythm Game Chart Format cpp\Rhythm Game Chart Format cpp\Writer.cpp" />
     <ClCompile Include="Rhythm Game Chart Format.cpp" />

@@ -22,5 +22,11 @@ namespace RhythmGameChart
             const u8 Note = 0xFF;       // Feel free to change these values these later, idgaf
             const u8 Text = 0xF1;
         }
+
+        namespace Helper
+        {
+            bool SystemIsLittleEndian();
+            void ReverseBits(byte& data);
+        }
     }
 }

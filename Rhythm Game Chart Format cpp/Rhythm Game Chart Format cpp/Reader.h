@@ -1,19 +1,18 @@
 #pragma once
+#include "BaseIO.h"
 
-#include "IO Util.h"
 #include <iostream>
 
 namespace RhythmGameChart
 {
     namespace IO
     {
-        class Reader
+        class Reader : BaseIO
         {
-        public:
-            Reader();
-            ~Reader();
         protected:
             VLV VLVDecode(std::ifstream& ifs);
+        private:
+            bool m_isLittleEndian;
         };
     }
 }

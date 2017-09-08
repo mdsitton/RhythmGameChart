@@ -1,16 +1,15 @@
 #pragma once
+#include "BaseIO.h"
 
-#include "IO Util.h"
 #include <vector>
 namespace RhythmGameChart
 {
     namespace IO
     {
-        class Writer
+        class Writer : BaseIO
         {
         public:
             Writer();
-            ~Writer();
         protected:
             // Converts a number into variable length value byte data and stores it in the m_encodedVLV vector
             void VLVEncode(VLV number);
@@ -20,6 +19,7 @@ namespace RhythmGameChart
 
         private:
             std::vector<byte> m_encodedVLV;
+            bool m_isLittleEndian;
         };
     }
 }
