@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 
 namespace RGCCPP::Midi
@@ -332,9 +333,8 @@ namespace RGCCPP::Midi
     }
 
     Song::Song(std::string songPath)
-    :m_midi(songPath+"/notes.mid")
+    :m_midiPath(songPath+"/testSong/notes.mid"), m_midi(m_midiPath), m_length(0.0)
     {
-
     }
 
     bool Song::load()
@@ -352,7 +352,7 @@ namespace RGCCPP::Midi
             }
 
             // find the longest midi track
-            if (m_length < midiTrack->endTime)
+            if (midiTrack != nullptr && m_length < midiTrack->endTime)
             {
                 m_length = m_midi.pulsetime_to_abstime(midiTrack->endTime);
             }
@@ -447,6 +447,12 @@ namespace RGCCPP::Midi
         }
         return true;
 
+    }
+
+
+    std::vector<Track> *Song::get_tracks()
+    {
+        return &m_tracks;
     }
 
 

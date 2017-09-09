@@ -1,6 +1,8 @@
 #include "smf.hpp"
 
 #include <cstdint>
+#include <string>
+#include <vector>
 
 #include "song_types.hpp"
 
