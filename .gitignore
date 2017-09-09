@@ -33,3 +33,16 @@
 
 # ignore build folder
 build/
+
+# Visual studio crap
+.vs/
+*.iik
+*.ipch
+ipch/
+Debug/
+Release/
+*.sdf
+*.pdp
+*.suo
+*.exe
+*.tlog/
