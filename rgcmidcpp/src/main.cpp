@@ -5,6 +5,6 @@
 int main()
 {
     
-    Song song("songs");
+    RGCCPP::Midi::Song song("songs");
     return 0;
 }
