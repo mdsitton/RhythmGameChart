@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "IO Util.h"
+#include <iostream>
+#include <bitset>
+
+using namespace std;
 
 namespace RhythmGameChart
 {
@@ -14,6 +18,13 @@ namespace RhythmGameChart
         void Helper::ReverseBits(byte& data)
         {
             // TODO
+        }
+        void Helper::PrintBinary(std::vector<byte> bytes)
+        {
+            for (int i = 0; i < bytes.size(); ++i)
+                cout << bitset<8>(bytes[i]);
+
+            cout << endl;
         }
     }
 }

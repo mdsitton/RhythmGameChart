@@ -1,6 +1,9 @@
 #pragma once
 
+#define DEBUG true;
+
 #include <string>
+#include <vector>
 namespace RhythmGameChart
 {
     namespace IO
@@ -27,6 +30,7 @@ namespace RhythmGameChart
         {
             bool SystemIsLittleEndian();
             void ReverseBits(byte& data);
+            void PrintBinary(std::vector<byte> bytes);
         }
     }
 }

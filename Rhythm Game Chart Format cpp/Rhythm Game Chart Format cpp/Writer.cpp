@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Writer.h"
+#include <iostream>
 
 using namespace std;
 
@@ -32,8 +33,13 @@ namespace RhythmGameChart
                 byte data = static_cast<byte>(lower7bits);
                 ToLittleEndian(data);
 
-                m_encodedVLV.push_back(data);
+                m_encodedVLV.insert(m_encodedVLV.begin(), data);
             }
+
+#if DEBUG
+            std::cout << "Binary of " << number << " is ";
+            Helper::PrintBinary(m_encodedVLV);
+#endif
         }
 
         void Writer::JoinTick(VLV tick, vector<byte>& eventData)
