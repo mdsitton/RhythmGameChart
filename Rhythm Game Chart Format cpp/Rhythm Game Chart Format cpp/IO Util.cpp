@@ -1,4 +1,7 @@
+#ifdef _WIN32
 #include "stdafx.h"
+#endif
+
 #include "IO Util.h"
 #include <iostream>
 #include <bitset>

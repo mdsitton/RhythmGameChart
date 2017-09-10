@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEBUG true;
+#define DEBUG true
 
 #include <string>
 #include <vector>
