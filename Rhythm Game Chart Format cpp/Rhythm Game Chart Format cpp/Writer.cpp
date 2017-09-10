@@ -1,6 +1,4 @@
-#ifdef _WIN32
 #include "stdafx.h"
-#endif
 
 #include "Writer.h"
 #include <iostream>
