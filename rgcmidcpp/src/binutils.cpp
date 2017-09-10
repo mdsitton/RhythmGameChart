@@ -1,3 +1,6 @@
+// Copyright (c) 2015-2017 Matthew Sitton <matthewsitton@gmail.com>
+// See LICENSE in the rhcmidcpp root for license information.
+
 #include "binutils.hpp"
 
 #include <algorithm>
