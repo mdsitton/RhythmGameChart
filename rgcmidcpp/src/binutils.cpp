@@ -77,3 +77,4 @@ void write_vlv(std::ostream &stream, uint32_t value)
         stream << byte;
     }
 }
+

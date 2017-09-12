@@ -97,3 +97,21 @@ void peek_type(std::istream &file, T *output, unsigned long length)
     read_type<T>(file, output, length);
     file.seekg(startingPos);
 }
+
+
+// Templates to write to different lengths values to files.
+
+template<typename T>
+void write_type(std::ostream &file, T source)
+{
+    auto size = sizeof(T);
+    int offset;
+
+    char* sourcePtr = reinterpret_cast<char*>(&source);
+
+    for (size_t i = 0; i < size; i++)
+    {
+        offset = static_cast<int>((size-1) - i); // endianness lol ?
+        file << *(sourcePtr+offset);
+    }
+}
