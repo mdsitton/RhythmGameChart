@@ -55,6 +55,7 @@ namespace RGCCPP::Midi
         std::vector<Track> *get_tracks();
         int16_t get_divison();
     private:
+	std::string m_midiPath;
         SmfReader m_midi;
         double m_length;
         std::vector<Track> m_tracks;
