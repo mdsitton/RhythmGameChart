@@ -19,20 +19,27 @@ uint32_t read_vlv(std::istream &stream);
 void write_vlv(std::ostream &stream, uint32_t value);
 
 // Templates to read from a file different length values
-template<typename T>
+template<typename T, bool swapEndian = true>
 T read_type(std::istream &file)
 {
     T output;
     auto size = sizeof(T);
     int offset;
     for (size_t i = 0; i < size; i++) {
-        offset = static_cast<int>((size-1) - i); // endianness lol ?
+        if (swapEndian)
+        {
+            offset = static_cast<int>((size-1) - i); // endianness lol ?
+        }
+        else
+        {
+            offset = i;
+        }
         file.read(reinterpret_cast<char*>(&output)+offset, 1);
     }
     return output;
 }
 
-template<typename T>
+template<typename T, bool swapEndian = true>
 T read_type(std::istream &file, size_t size)
 {
     T output = 0;
@@ -45,14 +52,21 @@ T read_type(std::istream &file, size_t size)
         int offset;
         for (size_t i = 0; i < size; i++)
         {
-            offset = static_cast<int>((size-1) - i); // endianness lol ?
+            if (swapEndian)
+            {
+                offset = static_cast<int>((size-1) - i); // endianness lol ?
+            }
+            else
+            {
+                offset = i;
+            }
             file.read(reinterpret_cast<char*>(&output)+offset, 1);
         }
     }
     return output;
 }
 
-template<typename T>
+template<typename T, bool swapEndian = true>
 void read_type(std::istream &file, T *output, size_t length)
 {
     auto size = sizeof(T);
@@ -61,40 +75,47 @@ void read_type(std::istream &file, T *output, size_t length)
     {
         for (size_t i = 0; i < size; i++)
         {
-            offset = static_cast<int>(((size-1) - i) + (size * j)); // endianness lol ?
+            if (swapEndian)
+            {
+                offset = static_cast<int>(((size-1) - i) + (size * j)); // endianness lol ?
+            }
+            else
+            {
+                offset = i + (size * j);
+            }
             file.read(reinterpret_cast<char*>(output) + offset, 1);
         }
     }
 }
 
 // We implement peek with read_type above to reduce code duplication.
-template<typename T>
+template<typename T, bool swapEndian = true>
 T peek_type(std::istream &file)
 {
     // We need to emulate a peek because we need several bytes of data.
     std::streampos startingPos = file.tellg();
-    T output = read_type<T>(file);
+    T output = read_type<T, swapEndian>(file);
     file.seekg(startingPos);
     return output;
 
 }
 
-template<typename T>
+template<typename T, bool swapEndian = true>
 T peek_type(std::istream &file, size_t size)
 {
     // We need to emulate a peek because we need several bytes of data.
     std::streampos startingPos = file.tellg();
-    T output = read_type<T>(file, size);
+    T output = read_type<T, swapEndian>(file, size);
     file.seekg(startingPos);
     return output;
 }
 
-template<typename T>
+template<typename T, bool swapEndian = true>
 void peek_type(std::istream &file, T *output, size_t length)
 {
     // We need to emulate a peek because we need several bytes of data.
     std::streampos startingPos = file.tellg();
-    read_type<T>(file, output, length);
+    read_type<T, swapEndian>(file, output, length);
     file.seekg(startingPos);
 }
 
@@ -102,7 +123,7 @@ void peek_type(std::istream &file, T *output, size_t length)
 // Templates to write to different lengths values to files.
 
 // write `source` to `file` in big endian
-template<typename T>
+template<typename T, bool swapEndian = true>
 void write_type(std::ostream &file, T source)
 {
     auto size = sizeof(T);
@@ -112,13 +133,20 @@ void write_type(std::ostream &file, T source)
 
     for (size_t i = 0; i < size; i++)
     {
-        offset = static_cast<int>((size-1) - i); // endianness lol ?
+        if (swapEndian)
+        {
+            offset = static_cast<int>((size-1) - i); // endianness lol ?
+        }
+        else
+        {
+            offset = i;
+        }
         file << *(sourcePtr+offset);
     }
 }
 
 // write only `size` bytes from `source` to `file` in big endian
-template<typename T>
+template<typename T, bool swapEndian = true>
 void write_type(std::ostream &file, T source, size_t size)
 {
     if (size > sizeof(T))
@@ -132,7 +160,14 @@ void write_type(std::ostream &file, T source, size_t size)
 
         for (size_t i = 0; i < size; i++)
         {
-            offset = static_cast<int>((size-1) - i); // endianness lol ?
+            if (swapEndian)
+            {
+                offset = static_cast<int>((size-1) - i); // endianness lol ?
+            }
+            else
+            {
+                offset = i;
+            }
             file << *(sourcePtr+offset);
         }
 
@@ -141,7 +176,7 @@ void write_type(std::ostream &file, T source, size_t size)
 
 // Write `length` number of `T` from `source` in big endian
 // Primarally used for writing strings.
-template<typename T>
+template<typename T, bool swapEndian = true>
 void write_type(std::ostream &file, T *source, size_t length)
 {
     auto size = sizeof(T);
@@ -152,7 +187,14 @@ void write_type(std::ostream &file, T *source, size_t length)
     {
         for (size_t i = 0; i < size; i++)
         {
-            offset = static_cast<int>(((size-1) - i) + (size * j)); // endianness lol ?
+            if (swapEndian)
+            {
+                offset = static_cast<int>(((size-1) - i) + (size * j)); // endianness lol ?
+            }
+            else
+            {
+                offset = i + (size * j);
+            }
             file << *(sourcePtr + offset);
         }
     }
