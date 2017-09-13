@@ -13,7 +13,7 @@
 // my code in openrhythm.
 
 // Read and write to VariableLengthValues
-std::vector<uint8_t>&& to_vlv(uint32_t value);
+std::vector<uint8_t> to_vlv(uint32_t value);
 uint32_t from_vlv(std::vector<uint8_t>& varLen);
 uint32_t read_vlv(std::istream &stream);
 void write_vlv(std::ostream &stream, uint32_t value);

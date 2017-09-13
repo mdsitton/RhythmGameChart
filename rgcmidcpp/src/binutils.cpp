@@ -4,6 +4,7 @@
 #include "binutils.hpp"
 
 #include <algorithm>
+#include <iostream>
 
 // This is an earlier varient of my varlen reading code I wrote for openrhythm w/ bugfixes.
 // It is slower but supports reading and writing, and i'm lazy so here we go.
@@ -33,15 +34,17 @@ uint32_t from_vlv(std::vector<uint8_t>& varLen)
     return value;
 }
 
-std::vector<uint8_t>&& to_vlv(uint32_t value)
+std::vector<uint8_t> to_vlv(uint32_t value)
 {
     uint8_t scratch;
     int byteCount = 0;
 
     std::vector<uint8_t> output;
 
+    std::cout << value << "\n";
+
     do {
-        scratch = value&0x7F;
+        scratch = value & 0x7F;
         if (byteCount != 0 ) {
             scratch |= 0x80;
         }
@@ -53,7 +56,7 @@ std::vector<uint8_t>&& to_vlv(uint32_t value)
 
     std::reverse(output.begin(), output.end());
 
-    return std::move(output);
+    return output;
 }
 
 uint32_t read_vlv(std::istream &stream)
