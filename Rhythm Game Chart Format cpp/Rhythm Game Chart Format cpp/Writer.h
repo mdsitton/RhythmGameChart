@@ -1,3 +1,6 @@
+// Copyright (c) 2017 Alexander Ong
+// See LICENSE in the RhythmGameChart root for license information.
+
 #pragma once
 #include "BaseIO.h"
 

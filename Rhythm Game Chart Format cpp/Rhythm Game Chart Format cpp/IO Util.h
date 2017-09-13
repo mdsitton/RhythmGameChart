@@ -3,6 +3,9 @@
 #define DEBUG true
 
 #include <string>
+// Copyright (c) 2017 Alexander Ong
+// See LICENSE in the RhythmGameChart root for license information.
+
 #include <vector>
 namespace RhythmGameChart
 {
