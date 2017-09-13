@@ -10,29 +10,23 @@
 #include "midireader/midi_chart.hpp"
 #include "binutils.hpp"
 
-int main()
+
+template <bool swapEndian>
+void test()
 {
-    
-    RGCCPP::Midi::Song song("songs");
-
-    song.load();
-
-    std::cout << "Song division: " << song.get_divison() << " ticks" << std::endl;
-    std::cout << "Track count: " << song.get_tracks()->size() << std::endl;
-    
     // Test 32-bit unsigned int round trip.
     {
         std::ofstream outFile("bintest.bin", std::ios_base::binary | std::ios_base::out);
 
         uint32_t ref_value = 128;
         
-        write_type<uint32_t, true>(outFile, ref_value);
+        write_type<uint32_t, swapEndian>(outFile, ref_value);
 
         outFile.close();
 
         std::ifstream inFile("bintest.bin", std::ios_base::binary);
 
-        auto data = read_type<uint32_t, true>(inFile);
+        auto data = read_type<uint32_t, swapEndian>(inFile);
 
         if (data == ref_value)
         {
@@ -60,7 +54,7 @@ int main()
         write_vlv(outFile, len);
 
         // write string contents.
-        write_type<char, true>(outFile, ref_value, len);
+        write_type<char, swapEndian>(outFile, ref_value, len);
 
         // Test a longer var len which will use all 4 bytes.
         write_vlv(outFile, ref_var_len);
@@ -76,7 +70,7 @@ int main()
         // allocate storage for string
         auto inValue = std::make_unique<char[]>(inLen + 1);
         inValue[inLen] = '\0';
-        read_type<char, true>(inFile, inValue.get(), inLen);
+        read_type<char, swapEndian>(inFile, inValue.get(), inLen);
 
         // Test a longer var len which will use all 4 bytes.
         size_t inLongVarLen = read_vlv(inFile);
@@ -92,6 +86,21 @@ int main()
         
         inFile.close();
     }
+}
+
+int main()
+{
+    
+    RGCCPP::Midi::Song song("songs");
+
+    song.load();
+
+    std::cout << "Song division: " << song.get_divison() << " ticks" << std::endl;
+    std::cout << "Track count: " << song.get_tracks()->size() << std::endl;
+
+    test<false>();
+    test<true>();
+
 
 
     return 0;

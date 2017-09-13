@@ -4,7 +4,6 @@
 #include "binutils.hpp"
 
 #include <algorithm>
-#include <iostream>
 
 // This is an earlier varient of my varlen reading code I wrote for openrhythm w/ bugfixes.
 // It is slower but supports reading and writing, and i'm lazy so here we go.
@@ -40,8 +39,6 @@ std::vector<uint8_t> to_vlv(uint32_t value)
     int byteCount = 0;
 
     std::vector<uint8_t> output;
-
-    std::cout << value << "\n";
 
     do {
         scratch = value & 0x7F;
