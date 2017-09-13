@@ -46,3 +46,6 @@ Release/
 *.suo
 *.exe
 *.tlog/
+
+# Ignore vim .swp files
+*.swp
