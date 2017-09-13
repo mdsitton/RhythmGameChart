@@ -53,7 +53,7 @@ T read_type(std::istream &file, size_t size)
 }
 
 template<typename T>
-void read_type(std::istream &file, T *output, unsigned long length)
+void read_type(std::istream &file, T *output, size_t length)
 {
     auto size = sizeof(T);
     int offset;
@@ -90,7 +90,7 @@ T peek_type(std::istream &file, size_t size)
 }
 
 template<typename T>
-void peek_type(std::istream &file, T *output, unsigned long length)
+void peek_type(std::istream &file, T *output, size_t length)
 {
     // We need to emulate a peek because we need several bytes of data.
     std::streampos startingPos = file.tellg();
@@ -101,6 +101,7 @@ void peek_type(std::istream &file, T *output, unsigned long length)
 
 // Templates to write to different lengths values to files.
 
+// write `source` to `file` in big endian
 template<typename T>
 void write_type(std::ostream &file, T source)
 {
@@ -113,5 +114,46 @@ void write_type(std::ostream &file, T source)
     {
         offset = static_cast<int>((size-1) - i); // endianness lol ?
         file << *(sourcePtr+offset);
+    }
+}
+
+// write only `size` bytes from `source` to `file` in big endian
+template<typename T>
+void write_type(std::ostream &file, T source, size_t size)
+{
+    if (size > sizeof(T))
+    {
+        throw std::runtime_error("Size greater than container type");
+    }
+    else
+    {
+        int offset;
+        char* sourcePtr = reinterpret_cast<char*>(&source);
+
+        for (size_t i = 0; i < size; i++)
+        {
+            offset = static_cast<int>((size-1) - i); // endianness lol ?
+            file << *(sourcePtr+offset);
+        }
+
+    }
+}
+
+// Write `length` number of `T` from `source` in big endian
+// Primarally used for writing strings.
+template<typename T>
+void write_type(std::ostream &file, T *source, size_t length)
+{
+    auto size = sizeof(T);
+    int offset;
+    char* sourcePtr = reinterpret_cast<char*>(source);
+
+    for (size_t j = 0; j < length; j++)
+    {
+        for (size_t i = 0; i < size; i++)
+        {
+            offset = static_cast<int>(((size-1) - i) + (size * j)); // endianness lol ?
+            file << *(sourcePtr + offset);
+        }
     }
 }
