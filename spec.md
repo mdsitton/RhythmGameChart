@@ -13,7 +13,14 @@ Byte order mark
 
 Version Number
 - We should have a version number in the header incase we need to ammend the format due to issues or functionality improvments.
+  - 8bit unsigned int
   - Also backwards compatibility should be taken into consideration for new format versions.
+
+- Ticks per quarter note.
+  - 16 bit unsigned int 
+  - This value gives context of how to parser all of the events in the event tracks
+    - I considered putting it in the metadata section but decided not to because you shouldnt need to parse the metadata section in order to parse the tracks.
+  - Track events use these ticks to define location and length of events.
 
 Track Offsets:
 - An offset table will store file offsets from the start of the metadata section for all tracks in the file.
@@ -50,6 +57,33 @@ Instrument/track specific properties:
 - `audio_level`
 - `drum_kit_type` This isn't really very useful unless we want to have multiple drum kit audio sounds for freestyle sections and then to have a default one.
 
+## Global Events
+
+`<track header> <timed event data>`
+
+This track is primarally for storing tempo and time signature changes.
+
+This track cannot be empty and should always contain atleast one time signature and one tempo event.
+
+Unlike midi there is no default tempo or time signature, there will always be both a time signature and tempo event at time=0.
+This is in order to vastly simplify certain parts of the parser.
+
+tempo events are structured as follows:
+
+`<deltaTicks> <µs per quarter note>`
+
+Type info:
+`<deltaTicks>` - vlv
+`<µspqn>` - 32bit unsigned int
+
+timeSignature events are structured as follows:
+
+`<deltaTicks> <numerator> <denominator>`
+
+Type info:
+`<deltaTicks>` - vlv
+`<numerator>` - 8bit unsigned int
+`<denominator>` - 8bit unsigned int (This is not 2^den like midi is)
 
 
 ## Instrument tracks
@@ -57,6 +91,7 @@ Instrument/track specific properties:
 `<track header> <timed event data> <difficulty 1 data> <difficulty N... data>`
     
 This works similarly to midi:
+
 `<var len delta tick since last event> <event>`
 
 The first byte in any event serves two purposes.
@@ -71,7 +106,6 @@ This leaves us with 2 event types and a max of 127 bytes per event.
 `0b00000000` Note event - Note or multiple notes.
 
 `0b10000000` Mod event - events which modify the meaning of a note or set of notes.
-
 
 
 #### Track Event descriptions
