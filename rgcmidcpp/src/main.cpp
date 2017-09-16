@@ -7,7 +7,7 @@
 #include <cstring>
 #include <memory>
 
-#include "midireader/midi_chart.hpp"
+#include "midi/midi_chart.hpp"
 #include "binutils.hpp"
 
 

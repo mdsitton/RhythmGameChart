@@ -4,6 +4,7 @@
 #pragma once
 
 #include <string>
+#include <fstream>
 
 namespace RGCCPP::RGC
 {
@@ -15,6 +16,6 @@ namespace RGCCPP::RGC
 	private:
 		std::string m_filePath;
 		std::ofstream m_rgcFile;
-		
-	}
+		void read_file();
+	};
 }
