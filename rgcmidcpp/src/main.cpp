@@ -45,16 +45,11 @@ void test()
         std::ofstream outFile("bintest_str.bin", std::ios_base::binary | std::ios_base::out);
 
 
-        char ref_value[] = "We are number one!";
+        std::string ref_val = "We are number one!";
         uint32_t ref_var_len = 12345678;
 
-        size_t len = strlen(ref_value);
-
-        // write string length
-        write_vlv(outFile, len);
-
-        // write string contents.
-        write_type<char, swapEndian>(outFile, ref_value, len);
+        // write string
+        write_string(outFile, ref_val);
 
         // Test a longer var len which will use all 4 bytes.
         write_vlv(outFile, ref_var_len);
@@ -63,19 +58,13 @@ void test()
 
         std::ifstream inFile("bintest_str.bin", std::ios_base::binary);
 
-
-        // read string length
-        size_t inLen = read_vlv(inFile);
-
-        // allocate storage for string
-        auto inValue = std::make_unique<char[]>(inLen + 1);
-        inValue[inLen] = '\0';
-        read_type<char, swapEndian>(inFile, inValue.get(), inLen);
+        // read string
+        std::string inValue = read_string(inFile);
 
         // Test a longer var len which will use all 4 bytes.
         size_t inLongVarLen = read_vlv(inFile);
 
-        if (strcmp(ref_value, inValue.get()) == 0 && inLen == len && inLongVarLen == ref_var_len)
+        if (inValue == ref_val && inLongVarLen == ref_var_len)
         {
             std::cout << "SUCCESS!" << std::endl;
         }

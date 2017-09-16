@@ -7,6 +7,7 @@
 #include <ostream>
 #include <vector>
 #include <stdexcept>
+#include <string>
 
 // This is an older version of the code used in openrhythm with backported
 // bugfixes because it's a bit simpler to extend/understand. Way slower than
@@ -17,6 +18,11 @@ std::vector<uint8_t> to_vlv(uint32_t value);
 uint32_t from_vlv(std::vector<uint8_t>& varLen);
 uint32_t read_vlv(std::istream &stream);
 void write_vlv(std::ostream &stream, uint32_t value);
+
+// Read and write strings
+// The data format here is <vlv length> <string data>
+std::string read_string(std::istream &stream);
+void write_string(std::ostream &stream, std::string &str);
 
 // Templates to read from a file different length values
 template<typename T, bool swapEndian = true>
@@ -177,11 +183,11 @@ void write_type(std::ostream &file, T source, size_t size)
 // Write `length` number of `T` from `source` in big endian
 // Primarally used for writing strings.
 template<typename T, bool swapEndian = true>
-void write_type(std::ostream &file, T *source, size_t length)
+void write_type(std::ostream &file, const T *source, size_t length)
 {
     auto size = sizeof(T);
     int offset;
-    char* sourcePtr = reinterpret_cast<char*>(source);
+    char* sourcePtr = const_cast<char*>(source);
 
     for (size_t j = 0; j < length; j++)
     {

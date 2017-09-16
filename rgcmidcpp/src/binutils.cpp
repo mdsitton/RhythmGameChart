@@ -4,6 +4,8 @@
 #include "binutils.hpp"
 
 #include <algorithm>
+#include <memory>
+#include <string>
 
 // This is an earlier varient of my varlen reading code I wrote for openrhythm w/ bugfixes.
 // It is slower but supports reading and writing, and i'm lazy so here we go.
@@ -78,3 +80,22 @@ void write_vlv(std::ostream &stream, uint32_t value)
     }
 }
 
+std::string read_string(std::istream &stream)
+{
+    auto length = read_vlv(stream);
+
+    // allocate storage for string
+    auto tempCharArr = std::make_unique<char[]>(length + 1);
+    tempCharArr[length] = '\0';
+
+    read_type<char, false>(stream, tempCharArr.get(), length);
+
+    return std::string{tempCharArr.get()};
+}
+
+void write_string(std::ostream &stream, std::string &str)
+{
+
+    write_vlv(stream, str.length());
+    write_type<char, false>(stream, str.c_str(), str.length());
+}
