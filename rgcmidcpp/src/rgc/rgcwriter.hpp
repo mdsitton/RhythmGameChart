@@ -16,6 +16,6 @@ namespace RGCCPP::RGC
 	private:
 		std::string m_filePath;
 		std::ofstream m_rgcFile;
-		void read_file();
+		void write_file();
 	};
 }

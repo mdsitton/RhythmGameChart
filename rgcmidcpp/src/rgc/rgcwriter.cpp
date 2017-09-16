@@ -15,7 +15,7 @@ namespace RGCCPP::RGC
 	{
         if (m_rgcFile)
         {
-            read_file();
+            write_file();
             m_rgcFile.close();
         }
         else
@@ -24,7 +24,7 @@ namespace RGCCPP::RGC
         }
 
 	}
-	void RgcWriter::read_file()
+	void RgcWriter::write_file()
 	{
 
 	}
