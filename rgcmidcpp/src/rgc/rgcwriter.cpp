@@ -10,22 +10,30 @@
 namespace RGCCPP::RGC
 {
 
-	RgcWriter::RgcWriter(std::string filePath)
-	:m_filePath(filePath), m_rgcFile(filePath, std::ios_base::binary | std::ios_base::out)
-	{
+    RgcWriter::RgcWriter(std::string filePath, RgcFileData* fileData)
+    :m_filePath(filePath), m_fileData(fileData),
+    m_rgcFile(filePath, std::ios_base::binary | std::ios_base::out)
+    {
         if (m_rgcFile)
         {
             write_file();
-            m_rgcFile.close();
         }
         else
         {
-            throw std::runtime_error("Failed to load midi.");
+            throw std::runtime_error("Failed to write rgc file.");
         }
+    }
 
-	}
-	void RgcWriter::write_file()
-	{
+    RgcWriter::~RgcWriter()
+    {
+        if (m_rgcFile)
+        {
+            m_rgcFile.close();
+        }
+    }
 
-	}
+    void RgcWriter::write_file()
+    {
+
+    }
 }
