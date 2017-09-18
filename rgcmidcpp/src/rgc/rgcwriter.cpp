@@ -35,5 +35,8 @@ namespace RGCCPP::RGC
     void RgcWriter::write_file()
     {
 
+        // Create an write the rgc bom to "RGCF" to the file.
+        uint32_t rgcBom = str_to_bin<uint32_t>("RGCF");
+        write_type<uint32_t, false>(m_rgcFile, rgcBom);
     }
 }

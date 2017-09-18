@@ -205,3 +205,33 @@ void write_type(std::ostream &file, const T *source, size_t length)
         }
     }
 }
+
+// convert string to bytes for creation of things like BOM's
+template<typename T, bool swapEndian = false>
+T str_to_bin(std::string str)
+{
+    T output;
+    int offset;
+    size_t size = sizeof(T);
+
+    if (size < str.length())
+    {
+        throw std::runtime_error("Size greater than container type");
+    }
+
+    char *outPtr = reinterpret_cast<char*>(&output);
+
+    for (size_t i = 0; i < str.length(); i++)
+    {
+            if (swapEndian)
+            {
+                offset = static_cast<int>((size-1) - i); // endianness lol ?
+            }
+            else
+            {
+                offset = i;
+            }
+            outPtr[i] = str[offset];
+    }
+    return output;
+}   
