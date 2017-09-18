@@ -5,6 +5,7 @@
 
 #include <string>
 #include <fstream>
+#include <sstream>
 
 #include "rgctypes.hpp"
 
@@ -20,6 +21,9 @@ namespace RGCCPP::RGC
         std::string m_filePath;
         std::ofstream m_rgcFile;
         RgcFileData* m_fileData;
+        std::stringstream m_headerStream;
+        std::stringstream m_trackStream;
+
 
         void write_file();
 

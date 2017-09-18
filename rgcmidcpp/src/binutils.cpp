@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <memory>
 #include <string>
+#include <string_view>
 
 // This is an earlier varient of my varlen reading code I wrote for openrhythm w/ bugfixes.
 // It is slower but supports reading and writing, and i'm lazy so here we go.
@@ -90,12 +91,12 @@ std::string read_string(std::istream &stream)
 
     read_type<char, false>(stream, tempCharArr.get(), length);
 
-    return std::string{tempCharArr.get()};
+    return {tempCharArr.get()};
 }
 
-void write_string(std::ostream &stream, std::string &str)
+void write_string(std::ostream &stream, std::string_view str)
 {
 
     write_vlv(stream, str.length());
-    write_type<char, false>(stream, str.c_str(), str.length());
+    write_type<char, false>(stream, str.data(), str.length());
 }

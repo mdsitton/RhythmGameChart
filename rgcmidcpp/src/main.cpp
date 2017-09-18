@@ -6,8 +6,10 @@
 #include <cstdint>
 #include <cstring>
 #include <memory>
+#include <string_view>
 
 #include "midi/midi_chart.hpp"
+#include "rgc/rgcwriter.hpp"
 #include "binutils.hpp"
 
 
@@ -34,7 +36,7 @@ void test()
         }
         else
         {
-            std::cout << "FAILED!" << std::endl;
+            std::cout << "FAILED!: " << ref_value << " vs " << data << std::endl;
         }
         
         inFile.close();
@@ -70,7 +72,7 @@ void test()
         }
         else
         {
-            std::cout << "FAILED!" << std::endl;
+            std::cout << "FAILED!: " << ref_val << " vs " << inValue << std::endl;
         }
         
         inFile.close();
@@ -87,8 +89,16 @@ int main()
     std::cout << "Song division: " << song.get_divison() << " ticks" << std::endl;
     std::cout << "Track count: " << song.get_tracks()->size() << std::endl;
 
+    // Tests
     test<false>();
     test<true>();
+
+    // RGC tests
+    // Using RGC version number 0 until we have better spec'd out everything.
+    // Going to start by implementing a single track w/ global events track.
+    RGCCPP::RGC::RgcFileData fileDataTest{0, 1, 480};
+
+    RGCCPP::RGC::RgcWriter testFileWriter{"test.rgc", &fileDataTest};
 
     return 0;
 }

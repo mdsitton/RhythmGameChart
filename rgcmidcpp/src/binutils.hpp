@@ -23,7 +23,7 @@ void write_vlv(std::ostream &stream, uint32_t value);
 // Read and write strings
 // The data format here is <vlv length> <string data>
 std::string read_string(std::istream &stream);
-void write_string(std::ostream &stream, std::string &str);
+void write_string(std::ostream &stream, std::string_view str);
 
 // Templates to read from a file different length values
 template<typename T, bool swapEndian = true>
@@ -222,15 +222,15 @@ T str_to_bin(std::string_view str)
 
     for (size_t i = 0; i < str.length(); i++)
     {
-            if (!swapEndian)
-            {
-                offset = static_cast<int>((size-1) - i); // endianness lol ?
-            }
-            else
-            {
-                offset = i;
-            }
-            output |= str[offset] << ((size-1-i)*8);
+        if (swapEndian)
+        {
+            offset = static_cast<int>((size-1) - i); // endianness lol ?
+        }
+        else
+        {
+            offset = i;
+        }
+        output |= str[offset] << ((size-1-i)*8);
     }
     return output;
 }
