@@ -25,7 +25,7 @@ Version Number
 
 Track Offsets:
 - An offset table will store file offsets from the start of the metadata section for all tracks in the file.
-  - Metadata will always be offset 0 so there really isnt much reason to include it in the table.
+  - Metadata will always be offset 0 but it is included anyways.
 
 
 ## Metadata
