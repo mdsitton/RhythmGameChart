@@ -65,8 +65,9 @@ This track is primarally for storing tempo and time signature changes.
 
 This track cannot be empty and should always contain atleast one time signature and one tempo event.
 
-Unlike midi there is no default tempo or time signature, there will always be both a time signature and tempo event at time=0.
-This is in order to vastly simplify certain parts of the parser.
+Like midi if there is no tempo events or no time signature events starting at time=0 it will default to:
+120 BPM tempo equivelent
+4/4 time signature
 
 tempo events are structured as follows:
 
