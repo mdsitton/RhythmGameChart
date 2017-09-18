@@ -23,6 +23,9 @@ Version Number
     - I considered putting it in the metadata section but decided not to because you shouldnt need to parse the metadata section in order to parse the tracks.
   - Track events use these ticks to define location and length of events.
 
+- Number of items in the track offset table.
+  - 8-bit unsigned int.
+
 Track Offsets:
 - An offset table will store file offsets from the start of the metadata section for all tracks in the file.
   - Metadata will always be offset 0 but it is included anyways.
