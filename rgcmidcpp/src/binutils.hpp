@@ -8,6 +8,7 @@
 #include <vector>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 
 // This is an older version of the code used in openrhythm with backported
 // bugfixes because it's a bit simpler to extend/understand. Way slower than
@@ -206,12 +207,12 @@ void write_type(std::ostream &file, const T *source, size_t length)
     }
 }
 
-// convert string to bytes for creation of things like BOM's
+// Convert string to bytes for creation of things like BOM's
 template<typename T, bool swapEndian = false>
-T str_to_bin(std::string str)
+T str_to_bin(std::string_view str)
 {
-    T output;
-    int offset;
+    T output = 0;
+    int offset = 0;
     size_t size = sizeof(T);
 
     if (size < str.length())
@@ -219,11 +220,9 @@ T str_to_bin(std::string str)
         throw std::runtime_error("Size greater than container type");
     }
 
-    char *outPtr = reinterpret_cast<char*>(&output);
-
     for (size_t i = 0; i < str.length(); i++)
     {
-            if (swapEndian)
+            if (!swapEndian)
             {
                 offset = static_cast<int>((size-1) - i); // endianness lol ?
             }
@@ -231,7 +230,7 @@ T str_to_bin(std::string str)
             {
                 offset = i;
             }
-            outPtr[i] = str[offset];
+            output |= str[offset] << ((size-1-i)*8);
     }
     return output;
-}   
+}
