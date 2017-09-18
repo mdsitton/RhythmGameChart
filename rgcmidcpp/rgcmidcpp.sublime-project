@@ -1,0 +1,17 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"build_systems":
+	[
+		{
+			"name": "Win64 Release Build",
+			"shell_cmd": "build.bat",
+			"shell": true,
+			"working_dir": "$project_path"
+		}
+	]
+}
