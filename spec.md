@@ -67,25 +67,27 @@ This track is primarally for storing tempo and time signature changes.
 This track cannot be empty and should always contain atleast one time signature and one tempo event.
 
 Like midi if there is no tempo events or no time signature events starting at time=0 it will default to:
-120 BPM tempo equivelent
-4/4 time signature
+
+- 120 BPM tempo equivelent
+- 4/4 time signature
 
 tempo events are structured as follows:
 
 `<deltaTicks> <µs per quarter note>`
 
 Type info:
-`<deltaTicks>` - vlv
-`<µspqn>` - 32bit unsigned int
+- `<deltaTicks>` - vlv
+- `<µspqn>` - 32bit unsigned int
 
 timeSignature events are structured as follows:
 
 `<deltaTicks> <numerator> <denominator>`
 
 Type info:
-`<deltaTicks>` - vlv
-`<numerator>` - 8bit unsigned int
-`<denominator>` - 8bit unsigned int (This is not 2^den like midi is)
+
+- `<deltaTicks>` - vlv
+- `<numerator>` - 8bit unsigned int
+- `<denominator>` - 8bit unsigned int (This is not 2^den like midi is)
 
 
 ## Instrument tracks
