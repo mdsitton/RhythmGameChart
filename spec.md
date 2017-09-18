@@ -4,6 +4,7 @@
 
 `<header> <metadata> <timed global song events> <Instrument Track 1> <Instrument Track N...>`
 
+RGC is has a little endian byte order unlike midi for example which is big endian.
 
 ## Header
 
