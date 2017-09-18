@@ -18,7 +18,7 @@ Version Number
   - Also backwards compatibility should be taken into consideration for new format versions.
 
 - Ticks per quarter note.
-  - 16 bit unsigned int 
+  - 32 bit unsigned int 
   - This value gives context of how to parser all of the events in the event tracks
     - I considered putting it in the metadata section but decided not to because you shouldnt need to parse the metadata section in order to parse the tracks.
   - Track events use these ticks to define location and length of events.
