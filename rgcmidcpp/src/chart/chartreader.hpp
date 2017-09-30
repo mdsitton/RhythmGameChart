@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <string>
 #include <string_view>
 
@@ -10,6 +11,17 @@
 
 //  operator=
 // }
+
+struct SectionData
+{
+	std::string name;
+	std::vector<std::string> data;
+	SectionData(std::string_view str)
+	{
+		// copy string
+		name = str;
+	}
+};
 
 class ChartReader
 {
@@ -22,4 +34,6 @@ private:
     std::string m_buffer;
     size_t m_bufferCharPos;
     bool m_eob;
+
+    std::vector<SectionData> m_sections;
 };

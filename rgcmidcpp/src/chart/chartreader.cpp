@@ -4,6 +4,14 @@
 #include <fstream>
 #include <utility>
 
+
+std::string_view strip(std::string_view str)
+{
+    size_t first = str.find_first_not_of(" \t");
+    size_t last = str.find_last_not_of(" \t");
+    return str.substr(first, last-first+1);
+}
+
 ChartReader::ChartReader(std::string path)
 :m_path(path), m_bufferCharPos(0), m_eob(false)
 {
@@ -26,14 +34,44 @@ ChartReader::ChartReader(std::string path)
 
 void ChartReader::read()
 {
+    bool activeSection = false;
+    SectionData *section = nullptr;
+
     while (m_eob == false)
     {
-        std::string_view line = next_line(m_buffer);
-        size_t lineLength = line.size();
-        if (line[0] == '[' && line[lineLength-1] == ']')
+        // TODO - strip each line here.
+        std::string_view line = strip(next_line(m_buffer));
+        if (activeSection)
         {
-            std::cout << line.substr(1, lineLength-2) << std::endl;
+
+            if (line[0] == '{')
+            {
+                continue;
+            }
+            else if (line[0] == '}')
+            {
+                activeSection = false;
+                continue;
+            }
+            section->data.emplace_back(line);
         }
+        else if (line[0] == '[' && line[(line.size())-1] == ']')
+        {
+            activeSection = true;
+            m_sections.emplace_back(line.substr(1, line.size()-2));
+            section = &m_sections.back();
+
+        }
+    }
+    for (auto &section : m_sections)
+    {
+        std::cout << section.name << std::endl;
+
+        for (auto &line : section.data)
+        {
+            std::cout << line << "\n";
+        }
+
     }
 
 }
