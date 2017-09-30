@@ -14,6 +14,8 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rgc/rgcwriter.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rgc/rgcreader.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rgc/rgctypes.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/chart/chartreader.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/timer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/binutils.hpp)
 
 set(SOURCE
@@ -22,10 +24,13 @@ set(SOURCE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/midi/midi_chart.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rgc/rgcwriter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rgc/rgcreader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/chart/chartreader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/timer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/binutils.cpp)
 
 
 include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/chart/
     ${CMAKE_CURRENT_SOURCE_DIR}/src/midi/
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rgc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/
