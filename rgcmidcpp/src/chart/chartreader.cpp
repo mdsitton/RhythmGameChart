@@ -3,6 +3,26 @@
 #include <iostream>
 #include <fstream>
 #include <utility>
+#include <cstdint>
+
+
+template<typename T>
+T string_to_uint(std::string_view str)
+{
+    static_assert(std::is_unsigned<T>(), "Must be unsigned type");
+
+    T output = 0;
+
+    for(char chr: str)
+    {
+        uint8_t d;
+        if ((d = chr - '0') <=9 )
+        {
+            output = output * 10 + d;
+        }
+    }
+    return output;
+}
 
 // Faster reimplementations of string functionality may eventually move into my own string wrapper or something.
 size_t find_first(std::string_view str, char chr, size_t start = 0)
@@ -122,14 +142,20 @@ void ChartReader::read()
         }
     }
 
-    // for (auto &section : m_sections)
-    // {
-    //     std::cout << section.name << std::endl;
-    //     for (auto &line : section.data)
-    //     {
-    //         std::cout << line.dataLeft << " | " << line.dataRight << "\n";
-    //     }
-    // }
+    uint64_t add = 0;
+    for (auto &section : m_sections)
+    {
+        //std::cout << section.name << std::endl;
+        for (auto &line : section.data)
+        {
+            if (section.name != "Song")
+            {
+                add = string_to_uint<uint32_t>(line.dataLeft);
+            }
+        }
+        add;
+    }
+    std::cout << add << "\n";
 
 }
 
