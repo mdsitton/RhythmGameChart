@@ -64,13 +64,13 @@ size_t find_last_not_in(std::string_view str, std::string_view collection, size_
     {
         start = str.size();
     }
-    for (size_t i = start; i >= 0; --i)
+    for (size_t i = str.size()-1; i >= 0; --i)
     {
         auto &chr = str[i];
         bool match = false;
         for (auto &item : collection)
         {
-            if (chr == item || chr == '\0')
+            if (chr == item)
             {
                 match = true;
             }
@@ -87,7 +87,7 @@ std::string_view strip(std::string_view str)
 {
     size_t first = find_first_not_in(str, " \t");
     size_t last = find_last_not_in(str, " \t");
-    return str.substr(first, last-first);
+    return str.substr(first, last-first+1);
 }
 
 
@@ -145,7 +145,7 @@ void ChartReader::read()
     uint64_t add = 0;
     for (auto &section : m_sections)
     {
-        //std::cout << section.name << std::endl;
+        std::cout << section.name << std::endl;
         for (auto &line : section.data)
         {
             if (section.name != "Song")
@@ -185,9 +185,6 @@ std::string_view ChartReader::next_line(std::string_view str)
         }
     }
 
-    // resize view to only cover a single line.
-    view.remove_suffix(view.size() - end);
-
     if (newBufPos == m_buffer.size())
     {
         m_eob = true;
@@ -195,5 +192,5 @@ std::string_view ChartReader::next_line(std::string_view str)
 
     m_bufferCharPos = newBufPos;
 
-    return std::move(view);
+    return view.substr(0, end);
 }
