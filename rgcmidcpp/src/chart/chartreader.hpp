@@ -12,14 +12,27 @@
 //  operator=
 // }
 
+struct LineData
+{
+    std::string_view dataLeft;
+    std::string_view dataRight;
+    int a;
+
+    LineData(std::string_view lData, std::string_view rData)
+    :dataLeft(lData), dataRight(rData)
+    {
+    }
+};
+
 struct SectionData
 {
 	std::string name;
-	std::vector<std::string> data;
+
+	std::vector<LineData> data;
+
 	SectionData(std::string_view str)
+    :name(str)
 	{
-		// copy string
-		name = str;
 	}
 };
 

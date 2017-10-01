@@ -4,13 +4,72 @@
 #include <fstream>
 #include <utility>
 
+// Faster reimplementations of string functionality may eventually move into my own string wrapper or something.
+size_t find_first(std::string_view str, char chr, size_t start = 0)
+{
+    for (size_t i = start; i < str.size(); ++i)
+    {
+        if (str[i] == chr)
+        {
+            return i;
+        }
+    }
+    return std::string::npos;
+}
+
+size_t find_first_not_in(std::string_view str, std::string_view collection, size_t start = 0)
+{
+    for (size_t i = start; i < str.size(); ++i)
+    {
+        auto &chr = str[i];
+        bool match = false;
+        for (auto &item : collection)
+        {
+            if (chr == item)
+            {
+                match = true;
+            }
+        }
+        if (match != true)
+        {
+            return i;
+        }
+    }
+    return std::string::npos;
+}
+
+size_t find_last_not_in(std::string_view str, std::string_view collection, size_t start = std::string::npos)
+{
+    if (start == std::string::npos)
+    {
+        start = str.size();
+    }
+    for (size_t i = start; i >= 0; --i)
+    {
+        auto &chr = str[i];
+        bool match = false;
+        for (auto &item : collection)
+        {
+            if (chr == item || chr == '\0')
+            {
+                match = true;
+            }
+        }
+        if (match != true)
+        {
+            return i;
+        }
+    }
+    return std::string::npos;
+}
 
 std::string_view strip(std::string_view str)
 {
-    size_t first = str.find_first_not_of(" \t");
-    size_t last = str.find_last_not_of(" \t");
-    return str.substr(first, last-first+1);
+    size_t first = find_first_not_in(str, " \t");
+    size_t last = find_last_not_in(str, " \t");
+    return str.substr(first, last-first);
 }
+
 
 ChartReader::ChartReader(std::string path)
 :m_path(path), m_bufferCharPos(0), m_eob(false)
@@ -20,7 +79,6 @@ ChartReader::ChartReader(std::string path)
     if (chartFile)
     {
         auto end = chartFile.tellg();
-        std::cout << end << std::endl;
         chartFile.seekg(0, std::ios::beg);
         m_buffer.resize(end - chartFile.tellg());
         chartFile.read(&m_buffer[0], m_buffer.size());
@@ -39,7 +97,6 @@ void ChartReader::read()
 
     while (m_eob == false)
     {
-        // TODO - strip each line here.
         std::string_view line = strip(next_line(m_buffer));
         if (activeSection)
         {
@@ -53,26 +110,26 @@ void ChartReader::read()
                 activeSection = false;
                 continue;
             }
-            section->data.emplace_back(line);
+            size_t split = find_first(line, '=');
+
+            section->data.emplace_back(strip(line.substr(0, split-1)), strip(line.substr(split + 1, line.size() - split)));
         }
         else if (line[0] == '[' && line[(line.size())-1] == ']')
         {
             activeSection = true;
             m_sections.emplace_back(line.substr(1, line.size()-2));
             section = &m_sections.back();
-
         }
     }
-    for (auto &section : m_sections)
-    {
-        std::cout << section.name << std::endl;
 
-        for (auto &line : section.data)
-        {
-            std::cout << line << "\n";
-        }
-
-    }
+    // for (auto &section : m_sections)
+    // {
+    //     std::cout << section.name << std::endl;
+    //     for (auto &line : section.data)
+    //     {
+    //         std::cout << line.dataLeft << " | " << line.dataRight << "\n";
+    //     }
+    // }
 
 }
 
