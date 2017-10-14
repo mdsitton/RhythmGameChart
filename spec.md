@@ -53,6 +53,7 @@ Ideas for global properties:
 - `audio_offset` Audio offset for easier syncing of audio to chart without re-encoding of lossy audio formats.
 - `song_length` Not really sure how useful this would be... so this is a maybe.
 - `loading_text`
+- `vox_gender` Maybe could be useful?
 
 Instrument/track specific properties:
 - `difficulty` Average difficulty of this track
