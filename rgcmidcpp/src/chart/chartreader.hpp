@@ -3,37 +3,33 @@
 #include <vector>
 #include <string>
 #include <string_view>
+#include <utility>
 
-// class StringBuffer
-// {
-// public:
-//  StringBuffer(std::string &str, );
-
-//  operator=
-// }
-
-struct LineData
-{
-    std::string_view dataLeft;
-    std::string_view dataRight;
-    int a;
-
-    LineData(std::string_view lData, std::string_view rData)
-    :dataLeft(lData), dataRight(rData)
-    {
-    }
-};
 
 struct SectionData
 {
+	using LineData = std::pair<std::string_view, std::string_view>;
 	std::string name;
-
 	std::vector<LineData> data;
 
 	SectionData(std::string_view str)
     :name(str)
 	{
 	}
+};
+
+struct SongSection
+{
+	std::string name;
+	std::string artist;
+	std::string album;
+	std::string year;
+	std::string charter;
+	std::string genre;
+	int resolution;
+	float offset;
+	using LineData = std::pair<std::string, std::string>;
+	std::vector<LineData> unused;
 };
 
 class ChartReader
@@ -49,4 +45,6 @@ private:
     bool m_eob;
 
     std::vector<SectionData> m_sections;
+    SongSection m_metadata;
+
 };

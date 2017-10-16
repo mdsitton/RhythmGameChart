@@ -4,6 +4,7 @@
 #include <fstream>
 #include <utility>
 #include <cstdint>
+#include <cstdlib>
 
 
 template<typename T>
@@ -120,7 +121,7 @@ void ChartReader::read()
         std::string_view line = strip(next_line(m_buffer));
         if (activeSection)
         {
-
+            // Section Data
             if (line[0] == '{')
             {
                 continue;
@@ -132,10 +133,13 @@ void ChartReader::read()
             }
             size_t split = find_first(line, '=');
 
-            section->data.emplace_back(strip(line.substr(0, split-1)), strip(line.substr(split + 1, line.size() - split)));
+            section->data.emplace_back(
+                strip(line.substr(0, split-1)), // Line left of =
+                strip(line.substr(split + 1, line.size() - split))); // Line Right of =
         }
         else if (line[0] == '[' && line[(line.size())-1] == ']')
         {
+            // Section Name
             activeSection = true;
             m_sections.emplace_back(line.substr(1, line.size()-2));
             section = &m_sections.back();
@@ -145,15 +149,52 @@ void ChartReader::read()
     uint64_t add = 0;
     for (auto &section : m_sections)
     {
-        std::cout << section.name << std::endl;
-        for (auto &line : section.data)
+        if (section.name == "Song")
         {
-            if (section.name != "Song")
+            for (auto &line : section.data)
             {
-                add = string_to_uint<uint32_t>(line.dataLeft);
+                std::string_view key = line.first;
+
+                if (key == "Name")
+                {
+                    m_metadata.name = line.second;
+                }
+                else if (key == "Artist")
+                {
+                    m_metadata.artist = line.second;
+                }
+                else if (key == "Year")
+                {
+                    m_metadata.year = line.second;
+                }
+                else if (key == "Charter")
+                {
+                    m_metadata.charter = line.second;
+                }
+                else if (key == "Genre")
+                {
+                    m_metadata.genre = line.second;
+                }
+                else if (key == "Resolution")
+                {
+                    m_metadata.resolution = string_to_uint<uint32_t>(line.second);
+                }
+                else if (key == "Offset")
+                {
+                    m_metadata.offset = atof(line.second.data());
+                }
+                else
+                {
+                    // Store any unknown key/values
+                    m_metadata.unused.emplace_back(line.first, line.second);
+                }
             }
         }
-        add;
+        else
+        {
+            // add = string_to_uint<uint32_t>(line.first);
+        }
+
     }
     std::cout << add << "\n";
 
