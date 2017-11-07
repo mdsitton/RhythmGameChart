@@ -1,4 +1,4 @@
-# Rhytm Game Chart Specification
+# Rhythm Game Chart Specification
 
 ## Overall filestructure:
 
