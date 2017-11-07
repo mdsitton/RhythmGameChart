@@ -36,8 +36,6 @@ namespace RGCCPP::RGC
     void RgcWriter::write_file()
     {
 
-
-
         // There is an offset table that comes next for the header but we cannot continue until
         // we know the track offsets.
 
@@ -63,14 +61,15 @@ namespace RGCCPP::RGC
 
         write_type<uint32_t, true>(m_trackStream, 0); // this is a stub for now.
 
-        // Create the rgc bom "RGCF" for the file.
-        // When output in the correct byte order, I want the BOM to read correct left to right
-        // in the file when viewed in a hex editor so we swap the byte order. I've looked at
-        // several LE file formats and they all do it like this.
-        // Note this could be because they don't actually have a bom and its just a file
-        // type identifier, but i think it could be useful for the type identifier and the bom
-        // to be the same thing. We will likely need to discuss.
-        uint32_t rgcBom = str_to_bin<uint32_t, false>(header_file_identifier);
+        // write section offsets.
+        for (auto &offset : trackOffsets)
+        {
+            write_vlv<uint64_t>(m_offsetTableStream, offset);
+        }
+        std::cout << m_offsetTableStream.str().length() << std::endl;
+
+        // Create the rgc bom "RGCf" for the file.
+        uint32_t rgcBom = str_to_bin<uint32_t, true>(header_file_identifier);
 
         write_type<uint32_t, true>(m_headerStream, rgcBom);
         write_type<uint8_t, true>(m_headerStream, m_fileData->version);
@@ -78,14 +77,10 @@ namespace RGCCPP::RGC
         write_type<uint8_t, true>(m_headerStream, trackOffsets.size());
         std::cout << m_headerStream.str().length() << std::endl;
 
-        // write offsets to header.
-        for (auto &offset : trackOffsets)
-        {
-            write_type<uint32_t, true>(m_headerStream, offset);
-        }
-        std::cout << m_headerStream.str().length() << std::endl;
+
         // write out the header and body.
         m_rgcFile << m_headerStream.rdbuf();
+        m_rgcFile << m_offsetTableStream.rdbuf();
         m_rgcFile << m_trackStream.rdbuf();
     }
 }

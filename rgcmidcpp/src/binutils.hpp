@@ -15,10 +15,84 @@
 // my code in openrhythm.
 
 // Read and write to VariableLengthValues
-std::vector<uint8_t> to_vlv(uint32_t value);
-uint32_t from_vlv(std::vector<uint8_t>& varLen);
-uint32_t read_vlv(std::istream &stream);
-void write_vlv(std::ostream &stream, uint32_t value);
+
+// This is an earlier varient of my varlen reading code I wrote for openrhythm w/ bugfixes.
+// It is slower but supports reading and writing, and i'm lazy so here we go.
+
+template<typename T>
+T from_vlv(std::vector<uint8_t>& varLen)
+{
+    T value = 0;
+
+    // Check that the size of the varlen fits into the max number of bytes we have available
+    if (varLen.size() > ((sizeof(T)*8)/7))
+    {
+        throw std::runtime_error("Variable Length Value to long for type!");
+        return 0;
+    }
+
+    // get the last element of the vector and verify that it doesnt
+    // have the contiuation bit set.
+    if (((* --varLen.end()) & 0x80) != 0)
+    {
+        throw std::runtime_error("Invalid Variable Length Value!");
+    }
+
+    for(auto &byte : varLen)
+    {
+        value = (value << 7) | (byte & 0x7F);
+    }
+
+    return value;
+}
+
+template<typename T>
+std::vector<uint8_t> to_vlv(T value)
+{
+    uint8_t scratch;
+    int byteCount = 0;
+
+    std::vector<uint8_t> output;
+
+    do {
+        scratch = value & 0x7F;
+        if (byteCount != 0 ) {
+            scratch |= 0x80;
+        }
+        output.push_back(scratch);
+        value >>= 7;
+        byteCount++;
+
+    } while(value != 0 && byteCount < ((sizeof(T)*8)/7));
+
+    std::reverse(output.begin(), output.end());
+
+    return output;
+}
+
+template<typename T>
+T read_vlv(std::istream &stream)
+{
+    std::vector<uint8_t> varLen;
+    uint8_t c;
+    do {
+        c = read_type<uint8_t>(stream);
+        varLen.push_back(c);
+    } while(c & 0x80 && varLen.size() < ((sizeof(T)*8)/7));
+
+    return from_vlv<T>(varLen);
+}
+
+template<typename T>
+void write_vlv(std::ostream &stream, T value)
+{
+    std::vector<uint8_t> varLen = to_vlv<T>(value);
+
+    for(auto &byte : varLen)
+    {
+        stream << byte;
+    }
+}
 
 // Read and write strings
 // The data format here is <vlv length> <string data>

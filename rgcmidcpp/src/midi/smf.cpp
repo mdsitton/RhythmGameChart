@@ -81,7 +81,7 @@ namespace RGCCPP::Midi
 
     void SmfReader::read_meta_event(const SmfEventInfo &eventInfo)
     {
-        MetaEvent event {eventInfo, read_type<MidiMetaEvent>(m_smfFile), read_vlv(m_smfFile)};
+        MetaEvent event {eventInfo, read_type<MidiMetaEvent>(m_smfFile), read_vlv<uint32_t>(m_smfFile)};
 
         // In the cases where we dont implement an event type log it, and its data.
         switch(event.type)
@@ -220,7 +220,7 @@ namespace RGCCPP::Midi
     {
         // TODO - Actually implement sysex events, they arent currently saved anywhere.
         // This will be needed for open notes, or many of the phase shift midi extensions.
-        auto length = read_vlv(m_smfFile);
+        auto length = read_vlv<uint32_t>(m_smfFile);
         std::vector<char> sysex;
         sysex.resize(length);
         read_type<char>(m_smfFile, &sysex[0], length);
@@ -306,7 +306,7 @@ namespace RGCCPP::Midi
         while (m_smfFile.tellg() < chunkEnd)
         {
 
-            eventInfo.deltaPulses = read_vlv(m_smfFile);
+            eventInfo.deltaPulses = read_vlv<uint32_t>(m_smfFile);
 
             // DO NOT use this for time calculations.
             // You must convert each deltaPulse to a time

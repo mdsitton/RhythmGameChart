@@ -8,82 +8,9 @@
 #include <string>
 #include <string_view>
 
-// This is an earlier varient of my varlen reading code I wrote for openrhythm w/ bugfixes.
-// It is slower but supports reading and writing, and i'm lazy so here we go.
-
-uint32_t from_vlv(std::vector<uint8_t>& varLen)
-{
-    uint32_t value = 0;
-
-    if (varLen.size() > 4)
-    {
-        throw std::runtime_error("Variable Length Value to long!");
-        return 0;
-    }
-
-    // get the last element of the vector and verify that it doesnt
-    // have the contiuation bit set.
-    if (((* --varLen.end()) & 0x80) != 0)
-    {
-        throw std::runtime_error("Invalid Variable Length Value!");
-    }
-
-    for(auto &byte : varLen)
-    {
-        value = (value << 7) | (byte & 0x7F);
-    }
-
-    return value;
-}
-
-std::vector<uint8_t> to_vlv(uint32_t value)
-{
-    uint8_t scratch;
-    int byteCount = 0;
-
-    std::vector<uint8_t> output;
-
-    do {
-        scratch = value & 0x7F;
-        if (byteCount != 0 ) {
-            scratch |= 0x80;
-        }
-        output.push_back(scratch);
-        value >>= 7;
-        byteCount++;
-
-    } while(value != 0 && byteCount < 4);
-
-    std::reverse(output.begin(), output.end());
-
-    return output;
-}
-
-uint32_t read_vlv(std::istream &stream)
-{
-    std::vector<uint8_t> varLen;
-    uint8_t c;
-    do {
-        c = read_type<uint8_t>(stream);
-        varLen.push_back(c);
-    } while(c & 0x80 && varLen.size() < 4);
-
-    return from_vlv(varLen);
-}
-
-void write_vlv(std::ostream &stream, uint32_t value)
-{
-    std::vector<uint8_t> varLen = to_vlv(value);
-
-    for(auto &byte : varLen)
-    {
-        stream << byte;
-    }
-}
-
 std::string read_string(std::istream &stream)
 {
-    auto length = read_vlv(stream);
+    auto length = read_vlv<uint32_t>(stream);
 
     // allocate storage for string
     auto tempCharArr = std::make_unique<char[]>(length + 1);
@@ -97,6 +24,6 @@ std::string read_string(std::istream &stream)
 void write_string(std::ostream &stream, std::string_view str)
 {
 
-    write_vlv(stream, str.length());
+    write_vlv<uint32_t>(stream, str.length());
     write_type<char, false>(stream, str.data(), str.length());
 }

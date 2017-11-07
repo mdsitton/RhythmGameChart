@@ -22,6 +22,7 @@ namespace RGCCPP::RGC
         std::ofstream m_rgcFile;
         RgcFileData* m_fileData;
         std::stringstream m_headerStream;
+        std::stringstream m_offsetTableStream;
         std::stringstream m_trackStream;
 
 
