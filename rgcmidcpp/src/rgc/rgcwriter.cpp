@@ -72,10 +72,15 @@ namespace RGCCPP::RGC
         uint32_t rgcBom = str_to_bin<uint32_t, true>(header_file_identifier);
 
         write_type<uint32_t, true>(m_headerStream, rgcBom);
-        write_type<uint8_t, true>(m_headerStream, m_fileData->version);
+        write_type<uint16_t, true>(m_headerStream, m_fileData->version);
+        write_type<uint16_t, true>(m_headerStream, 1);
         write_type<uint16_t, true>(m_headerStream, m_fileData->division);
+        write_type<uint16_t, true>(m_headerStream, m_headerStream.str().length());
         write_type<uint8_t, true>(m_headerStream, trackOffsets.size());
-        std::cout << m_headerStream.str().length() << std::endl;
+        write_type<uint8_t, true>(m_headerStream, 0);
+        write_type<uint8_t, true>(m_headerStream, 0);
+        write_type<uint8_t, true>(m_headerStream, 0);
+        std::cout << "Size of offsets: " << m_headerStream.str().length() << std::endl;
 
 
         // write out the header and body.

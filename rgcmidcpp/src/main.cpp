@@ -54,7 +54,7 @@ void test()
         write_string(outFile, ref_val);
 
         // Test a longer var len which will use all 4 bytes.
-        write_vlv(outFile, ref_var_len);
+        write_vlv<uint32_t>(outFile, ref_var_len);
 
         outFile.close();
 
@@ -64,7 +64,7 @@ void test()
         std::string inValue = read_string(inFile);
 
         // Test a longer var len which will use all 4 bytes.
-        size_t inLongVarLen = read_vlv(inFile);
+        size_t inLongVarLen = read_vlv<uint32_t>(inFile);
 
         if (inValue == ref_val && inLongVarLen == ref_var_len)
         {
