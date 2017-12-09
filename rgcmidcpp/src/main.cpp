@@ -79,6 +79,51 @@ void test()
         
         inFile.close();
     }
+    {
+
+
+        Timer time;
+        double t = 0.0;
+        std::ofstream outFile("speedtest.bin", std::ios_base::binary | std::ios_base::out);
+
+        if (outFile)
+        {
+            time.tick();
+            for (int i =0; i < 10000; i++)
+            {
+                write_type<uint32_t, swapEndian>(outFile, 110230120);
+            }
+            outFile.close();
+
+            t = time.tick();
+            std::cout << "Write Time: " << t << std::endl;
+
+
+            std::ifstream inFile("speedtest.bin", std::ios_base::binary);
+
+            time.tick();
+            int q = 0;
+            uint32_t v;
+
+            for (int i=0; i < 10000; i++)
+            {
+                v = read_type<uint32_t, swapEndian>(inFile);
+                q++;
+                v+=q;
+            }
+            t = time.tick();
+
+            std::cout << v << std::endl;
+
+            std::cout << "Read Time: " << t << std::endl;
+        }
+        else
+        {
+            std::cout << "Failed to open file." << std::endl;
+        }
+
+    }
+
 }
 
 int main()
@@ -109,7 +154,7 @@ int main()
     RGCCPP::RGC::RgcWriter testFileWriter{"test.rgc", &fileDataTest};
 
     time.tick();
-    ChartReader chart("notes.chart");
+    ChartReader chart("Crash Test 5.5.chart");
     chart.read();
     ti = time.tick();
     std::cout << "Chart parse: " << ti << " ms" << std::endl;

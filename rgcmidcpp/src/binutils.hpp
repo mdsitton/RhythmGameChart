@@ -144,30 +144,30 @@ void peek_type(std::istream &file, T *output, size_t length)
     file.seekg(startingPos);
 }
 
-
-// Templates to write to different lengths values to files.
-
 // write `source` to `file` in big endian
 template<typename T, bool swapEndian = true>
 void write_type(std::ostream &file, T source)
 {
     auto size = sizeof(T);
     int offset;
+    T output;
 
     char* sourcePtr = reinterpret_cast<char*>(&source);
+    char* outPtr = reinterpret_cast<char*>(&output);
 
     for (size_t i = 0; i < size; i++)
     {
         if (swapEndian)
         {
-            offset = static_cast<int>((size-1) - i); // endianness lol ?
+            offset = (size-1) - i; // endianness lol ?
         }
         else
         {
             offset = i;
         }
-        file << *(sourcePtr+offset);
+        *(outPtr+i) = *(sourcePtr+offset);
     }
+    file.write(outPtr, size);
 }
 
 // write only `size` bytes from `source` to `file` in big endian
@@ -181,20 +181,24 @@ void write_type(std::ostream &file, T source, size_t size)
     else
     {
         int offset;
+        T output;
+
         char* sourcePtr = reinterpret_cast<char*>(&source);
+        char* outPtr = reinterpret_cast<char*>(&output);
 
         for (size_t i = 0; i < size; i++)
         {
             if (swapEndian)
             {
-                offset = static_cast<int>((size-1) - i); // endianness lol ?
+                offset = (size-1) - i; // endianness lol ?
             }
             else
             {
                 offset = i;
             }
-            file << *(sourcePtr+offset);
+            *(outPtr+i) = *(sourcePtr+offset);
         }
+        file.write(outPtr, size);
 
     }
 }
@@ -206,7 +210,9 @@ void write_type(std::ostream &file, const T *source, size_t length)
 {
     auto size = sizeof(T);
     int offset;
+    T output;
     char* sourcePtr = const_cast<char*>(source);
+    char* outPtr = reinterpret_cast<char*>(&output);
 
     for (size_t j = 0; j < length; j++)
     {
@@ -214,14 +220,15 @@ void write_type(std::ostream &file, const T *source, size_t length)
         {
             if (swapEndian)
             {
-                offset = static_cast<int>(((size-1) - i) + (size * j)); // endianness lol ?
+                offset = ((size-1) - i) + (size * j); // endianness lol ?
             }
             else
             {
                 offset = i + (size * j);
             }
-            file << *(sourcePtr + offset);
+            *(outPtr+i) = *(sourcePtr+offset);
         }
+        file.write(outPtr, size);
     }
 }
 
@@ -327,8 +334,5 @@ void write_vlv(std::ostream &stream, T value)
 {
     std::vector<uint8_t> varLen = to_vlv<T>(value);
 
-    for(auto &byte : varLen)
-    {
-        stream << byte;
-    }
+    stream.write(reinterpret_cast<char*>(&varLen[0]), sizeof(uint8_t)*varLen.size());
 }
