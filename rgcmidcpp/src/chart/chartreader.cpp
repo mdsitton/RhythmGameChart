@@ -38,6 +38,22 @@ size_t find_first(std::string_view str, char chr, size_t start = 0)
     return std::string::npos;
 }
 
+size_t find_last(std::string_view str, char chr, size_t start = std::string::npos)
+{
+    if (start == std::string::npos)
+    {
+        start = str.size()-1;
+    }
+    for (size_t i = start; i >= 0; --i)
+    {
+        if (str[i] == chr)
+        {
+            return i;
+        }
+    }
+    return std::string::npos;
+}
+
 size_t find_first_not_in(std::string_view str, std::string_view collection, size_t start = 0)
 {
     for (size_t i = start; i < str.size(); ++i)
@@ -63,9 +79,9 @@ size_t find_last_not_in(std::string_view str, std::string_view collection, size_
 {
     if (start == std::string::npos)
     {
-        start = str.size();
+        start = str.size()-1;
     }
-    for (size_t i = str.size()-1; i >= 0; --i)
+    for (size_t i = start; i >= 0; --i)
     {
         auto &chr = str[i];
         bool match = false;
@@ -84,11 +100,43 @@ size_t find_last_not_in(std::string_view str, std::string_view collection, size_
     return std::string::npos;
 }
 
+std::vector<std::string_view> string_split(std::string_view str, char delimiter)
+{
+    std::vector<std::string_view> split;
+
+    size_t start = 0;
+    size_t end = 0;
+    bool running = true;
+
+    while (running)
+    {
+        end = find_first(str, delimiter, start);
+        if (end == std::string::npos)
+        {
+            end = str.size();
+            running = false;
+        }
+        split.push_back(str.substr(start, end-start));
+        start = end + 1;
+    }
+
+    return split;
+}
+
 std::string_view strip(std::string_view str)
 {
     size_t first = find_first_not_in(str, " \t");
     size_t last = find_last_not_in(str, " \t");
-    return str.substr(first, last-first+1);
+
+    // Check for blank lines.
+    if (first == std::string::npos && last == std::string::npos)
+    {
+        return "";
+    }
+    else
+    {
+        return str.substr(first, last-first+1);
+    }
 }
 
 
@@ -146,7 +194,6 @@ void ChartReader::read()
         }
     }
 
-    uint64_t add = 0;
     for (auto &section : m_sections)
     {
         if (section.name == "Song")
@@ -192,12 +239,37 @@ void ChartReader::read()
         }
         else
         {
-            // add = string_to_uint<uint32_t>(line.first);
+
+            uint64_t tickTime = 0;
+            for (auto &line : section.data)
+            {
+                tickTime = string_to_uint<uint32_t>(line.first);
+
+                // Skip hand animation and anchors for now
+                if (line.second[0] == 'H' || line.second[0] == 'A')
+                {
+                    continue;
+                }
+
+                if (line.second[0] == 'E')
+                {
+                    auto posFirst = find_first(line.second, '\"')+1;
+                    auto posLast = find_last(line.second, '\"');
+
+                    if (posFirst != std::string::npos && posLast != std::string::npos)
+                    {
+                        auto data = line.second.substr(posFirst, posLast - posFirst);
+                        // std::cout << data << std::endl;
+                    }
+                }
+
+                auto parts = string_split(line.second, ' ');
+
+
+
+            }
         }
-
     }
-    std::cout << add << "\n";
-
 }
 
 std::string_view ChartReader::next_line(std::string_view str)

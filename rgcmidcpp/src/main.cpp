@@ -10,7 +10,9 @@
 
 #include "midi/midi_chart.hpp"
 #include "rgc/rgcwriter.hpp"
+#include "chart/chartreader.hpp"
 #include "binutils.hpp"
+#include "timer.hpp"
 
 
 template <bool swapEndian>
@@ -81,10 +83,16 @@ void test()
 
 int main()
 {
+
+    Timer time;
     
+    time.tick();
     RGCCPP::Midi::Song song("songs");
 
     song.load();
+    double ti = time.tick();
+    std::cout << ti << " ms" << std::endl;
+
 
     std::cout << "Song division: " << song.get_divison() << " ticks" << std::endl;
     std::cout << "Track count: " << song.get_tracks()->size() << std::endl;
@@ -99,6 +107,12 @@ int main()
     RGCCPP::RGC::RgcFileData fileDataTest{0, 1, 480};
 
     RGCCPP::RGC::RgcWriter testFileWriter{"test.rgc", &fileDataTest};
+
+    time.tick();
+    ChartReader chart("notes.chart");
+    chart.read();
+    ti = time.tick();
+    std::cout << "Chart parse: " << ti << " ms" << std::endl;
 
     return 0;
 }
