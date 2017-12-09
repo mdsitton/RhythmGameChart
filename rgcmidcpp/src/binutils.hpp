@@ -25,18 +25,28 @@ template<typename T, bool swapEndian = true>
 T read_type(std::istream &file)
 {
     T output;
-    auto size = sizeof(T);
+
+    constexpr auto size = sizeof(T);
+
     int offset;
-    for (size_t i = 0; i < size; i++) {
+    
+    char readContainer[size];
+
+    file.read(&readContainer[0], size);
+
+    char* outPtr = reinterpret_cast<char*>(&output);
+
+    for (size_t i = 0; i < size; i++)
+    {
         if (swapEndian)
         {
-            offset = static_cast<int>((size-1) - i); // endianness lol ?
+            offset = (size-1) - i; // endianness lol ?
         }
         else
         {
             offset = i;
         }
-        file.read(reinterpret_cast<char*>(&output)+offset, 1);
+        *(outPtr+offset) = readContainer[i];
     }
     return output;
 }
@@ -52,17 +62,24 @@ T read_type(std::istream &file, size_t size)
     else
     {
         int offset;
+
+        char readContainer[size];
+
+        file.read(&readContainer[0], size);
+
+        char *outPtr = reinterpret_cast<char*>(&output);
+
         for (size_t i = 0; i < size; i++)
         {
             if (swapEndian)
             {
-                offset = static_cast<int>((size-1) - i); // endianness lol ?
+                offset = (size-1) - i; // endianness lol ?
             }
             else
             {
                 offset = i;
             }
-            file.read(reinterpret_cast<char*>(&output)+offset, 1);
+            *(outPtr+offset) = readContainer[i];
         }
     }
     return output;
@@ -75,17 +92,23 @@ void read_type(std::istream &file, T *output, size_t length)
     int offset;
     for (size_t j = 0; j < length; j++)
     {
+
+        char *outPtr = reinterpret_cast<char*>(output);
+        char readContainer[size];
+        file.read(&readContainer[0], size);
+
         for (size_t i = 0; i < size; i++)
         {
             if (swapEndian)
             {
-                offset = static_cast<int>(((size-1) - i) + (size * j)); // endianness lol ?
+                offset = ((size-1) - i) + (size * j); // endianness lol ?
             }
             else
             {
                 offset = i + (size * j);
             }
-            file.read(reinterpret_cast<char*>(output) + offset, 1);
+
+            *(outPtr+offset) = readContainer[i];
         }
     }
 }
